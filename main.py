@@ -1,14 +1,12 @@
 import pygame
-
+from jogador import Jogador
 
 if __name__ == "__main__":
     pygame.init()
 
-    x = 400 #inicial neymar
-    y = 300 #inicial neymar
-    velocidade = 15
+    neymar = Jogador('neymar.png', 400, 300, 15)
+
     fundo = pygame.image.load('campo.png')
-    neymar = pygame.image.load('Bonecos-de-acão-mini-Brasil-futebol-Boneco-Brasil---Neymar-l.png')
 
     janela = pygame.display.set_mode((800, 600))  # tamanho janela
     pygame.display.set_caption("Projeto final POO")
@@ -20,29 +18,12 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 janela_aberta = False
 
-        comandos = pygame.key.get_pressed()
-        if comandos[pygame.K_UP]:
-            y -= velocidade
-        if comandos[pygame.K_DOWN]:
-            y += velocidade
-        if comandos[pygame.K_RIGHT]:
-            x += velocidade
-        if comandos[pygame.K_LEFT]:
-            x -= velocidade
+        neymar.movimenta(pygame.key.get_pressed())
+        neymar.verifica_limites(800, 600)
 
-        if y <= 0:
-            y = 600
-        if y > 600:
-            y = 0
-        if x <= 0:
-            x = 800
-        if x > 800:
-            x = 0
-
-        janela.blit( fundo, (0,0))
+        janela.blit(fundo, (0, 0))
         # janela.fill((0, 0, 0))
-        janela.blit(neymar, (x, y))
+        janela.blit(neymar.imagem, (neymar.x, neymar.y))
         pygame.display.update()
 
     pygame.quit()
-
