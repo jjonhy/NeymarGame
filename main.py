@@ -1,17 +1,28 @@
 import pygame
 
 
+class Neymar:
+    def __init__(self, velocidade, x_inicial, y_inicial):
+        self.velocidade = velocidade
+        self.x_inicial = x_inicial
+        self.y_inicial = y_inicial
+        self.ney_img = pygame.image.load('Bonecos-de-acão-mini-Brasil-futebol-Boneco-Brasil---Neymar-l.png')
+
+
+class Fundo:
+    def __init__(self):
+        self.img = pygame.image.load('campo.png')
+
+
 if __name__ == "__main__":
     pygame.init()
 
-    x = 400 #inicial neymar
-    y = 300 #inicial neymar
-    velocidade = 15
-    fundo = pygame.image.load('campo.png')
-    neymar = pygame.image.load('Bonecos-de-acão-mini-Brasil-futebol-Boneco-Brasil---Neymar-l.png')
+    neymar = Neymar(15, 400, 300)  # colocando o neymar no meio da tela
+    fundo = Fundo()
 
     janela = pygame.display.set_mode((800, 600))  # tamanho janela
-    pygame.display.set_caption("Projeto final POO")
+
+    pygame.display.set_caption("Projeto final POO")  # titulo da janela
 
     janela_aberta = True
     while janela_aberta:
@@ -22,27 +33,26 @@ if __name__ == "__main__":
 
         comandos = pygame.key.get_pressed()
         if comandos[pygame.K_UP]:
-            y -= velocidade
+            neymar.y_inicial -= neymar.velocidade
         if comandos[pygame.K_DOWN]:
-            y += velocidade
+            neymar.y_inicial += neymar.velocidade
         if comandos[pygame.K_RIGHT]:
-            x += velocidade
+            neymar.x_inicial += neymar.velocidade
         if comandos[pygame.K_LEFT]:
-            x -= velocidade
+            neymar.x_inicial -= neymar.velocidade
 
-        if y <= 0:
-            y = 600
-        if y > 600:
-            y = 0
-        if x <= 0:
-            x = 800
-        if x > 800:
-            x = 0
+        if neymar.y_inicial <= 0:
+            neymar.y_inicial = 600
+        if neymar.y_inicial > 600:
+            neymar.y_inicial = 0
+        if neymar.x_inicial <= 0:
+            neymar.x_inicial = 800
+        if neymar.x_inicial > 800:
+            neymar.x_inicial = 0
 
-        janela.blit( fundo, (0,0))
+        janela.blit(fundo.img, (0, 0))
         # janela.fill((0, 0, 0))
-        janela.blit(neymar, (x, y))
+        janela.blit(neymar.ney_img, (neymar.x_inicial, neymar.y_inicial))
         pygame.display.update()
 
     pygame.quit()
-
