@@ -1,4 +1,5 @@
 import pygame
+from mapa import Mapa
 
 
 class Neymar:
@@ -13,46 +14,91 @@ class Fundo:
     def __init__(self):
         self.img = pygame.image.load('campo.png')
 
-
 if __name__ == "__main__":
     pygame.init()
 
-    neymar = Neymar(15, 400, 300)  # colocando o neymar no meio da tela
-    fundo = Fundo()
+    for fase in range(1, 4):
+        janela = pygame.display.set_mode((1000, 800))  # tamanho janela
+        pygame.display.set_caption("Projeto final POO")  # titulo da janela
+        fundo = Fundo()
 
-    janela = pygame.display.set_mode((800, 600))  # tamanho janela
+        mapa = Mapa(fase)
+        
+        neymar = {}
 
-    pygame.display.set_caption("Projeto final POO")  # titulo da janela
+        if(fase == 1): neymar = Neymar(10, 0, 10)
+        if(fase == 2): neymar = Neymar(10, 0, 350)
+        if(fase == 3): neymar = Neymar(10, 470, 360)        
 
-    janela_aberta = True
-    while janela_aberta:
-        pygame.time.delay(50)  # a cada 50 milisegundo executa abaixo
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                janela_aberta = False
+        font = pygame.font.SysFont('Arial', 12, bold=True)    
+        # Transforma o texto em uma imagem para ser mostrada na tela
+        img = font.render('#', True, "WHITE")
 
-        comandos = pygame.key.get_pressed()
-        if comandos[pygame.K_UP]:
-            neymar.y_inicial -= neymar.velocidade
-        if comandos[pygame.K_DOWN]:
-            neymar.y_inicial += neymar.velocidade
-        if comandos[pygame.K_RIGHT]:
-            neymar.x_inicial += neymar.velocidade
-        if comandos[pygame.K_LEFT]:
-            neymar.x_inicial -= neymar.velocidade
+        janela_aberta = True
+        while janela_aberta:
+            pygame.time.delay(50)  # a cada 50 milisegundo executa abaixo
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    janela_aberta = False
 
-        if neymar.y_inicial <= 0:
-            neymar.y_inicial = 600
-        if neymar.y_inicial > 600:
-            neymar.y_inicial = 0
-        if neymar.x_inicial <= 0:
-            neymar.x_inicial = 800
-        if neymar.x_inicial > 800:
-            neymar.x_inicial = 0
+            comandos = pygame.key.get_pressed()
+            
+            #Quando uma tecla é pressionada, primeiro verifica(na matriz) se possui alguma parede impedindo o movimento, se não altera a posicao
+            if comandos[pygame.K_UP]:
+                flag = False
+                for i in range(int(neymar.x_inicial/10), int(neymar.x_inicial/10 + 7)):
+                    if(mapa.matriz[int((neymar.y_inicial-10)/10)][i] == 1):
+                        flag = True
+                        break
+                if(flag == False):neymar.y_inicial -= neymar.velocidade
+            
+            if comandos[pygame.K_DOWN]:
+                flag = False
+                for i in range(int(neymar.x_inicial/10), int(neymar.x_inicial/10 + 7)):
+                    if(mapa.matriz[int((neymar.y_inicial+100)/10)][i] == 1):
+                        flag = True
+                        break
+                if(flag == False):neymar.y_inicial += neymar.velocidade
+            
+            if comandos[pygame.K_RIGHT]:            
+                flag = False
+                for i in range(int(neymar.y_inicial/10), int(neymar.y_inicial/10 + 10)):
+                    if(mapa.matriz[i][int((neymar.x_inicial + 70)/10)] == 1):
+                        flag = True
+                        break
+                if(flag == False):neymar.x_inicial += neymar.velocidade
+                
+            if comandos[pygame.K_LEFT]:
+                flag = False
+                for i in range(int(neymar.y_inicial/10), int(neymar.y_inicial/10 + 10)):
+                    if(mapa.matriz[i][int((neymar.x_inicial -10)/10)] == 1):
+                        flag = True
+                        break
+                if(flag == False):neymar.x_inicial -= neymar.velocidade
 
-        janela.blit(fundo.img, (0, 0))
-        # janela.fill((0, 0, 0))
-        janela.blit(neymar.ney_img, (neymar.x_inicial, neymar.y_inicial))
-        pygame.display.update()
+
+            janela.blit(fundo.img, (0, 0))
+            # janela.fill((0, 0, 0))
+            janela.blit(neymar.ney_img, (neymar.x_inicial, neymar.y_inicial))
+            
+            
+            #Cada for renderiza as paredes em torno do neymar em uma direção
+            for i in range(int((neymar.x_inicial - 30)/10) , int((neymar.x_inicial + 100)/10)):
+                if(mapa.matriz[int((neymar.y_inicial - 10)/10)][i] == 1): janela.blit(img, (i*10 , neymar.y_inicial - 10))
+                
+            for i in range(int((neymar.x_inicial - 30)/10), int((neymar.x_inicial + 100)/10)):
+                if(mapa.matriz[int((neymar.y_inicial + 100)/10)][i] == 1): janela.blit(img, (i*10 , neymar.y_inicial + 100))
+    
+            for i in range(int((neymar.y_inicial - 30)/10), int((neymar.y_inicial + 130)/10)):
+                if(mapa.matriz[i][int((neymar.x_inicial - 10)/10)] == 1): janela.blit(img, (neymar.x_inicial-10 , i*10))
+
+            for i in range(int((neymar.y_inicial - 30)/10), int((neymar.y_inicial + 130)/10)):
+                if(mapa.matriz[i][int((neymar.x_inicial + 70)/10)] == 1): janela.blit(img, (neymar.x_inicial+70 , i*10))
+
+            #Verificando se o jogador chegou no objetivo
+            if(mapa.matriz[int(neymar.y_inicial/10)][int(neymar.x_inicial/10)] == 2):
+                continue
+
+            pygame.display.update()
 
     pygame.quit()
