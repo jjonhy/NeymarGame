@@ -71,7 +71,7 @@ if __name__ == "__main__":
             if comandos[pygame.K_LEFT]:
                 flag = False
                 for i in range(int(neymar.y_inicial/10), int(neymar.y_inicial/10 + 10)):
-                    if(mapa.matriz[i][int((neymar.x_inicial -10)/10)] == 1):
+                    if(mapa.matriz[i][int((neymar.x_inicial - 10)/10)] == 1):
                         flag = True
                         break
                 if(flag == False):neymar.x_inicial -= neymar.velocidade
@@ -84,20 +84,35 @@ if __name__ == "__main__":
             
             #Cada for renderiza as paredes em torno do neymar em uma direção
             for i in range(int((neymar.x_inicial - 30)/10) , int((neymar.x_inicial + 100)/10)):
+                #Renderiza as paredes em volta do personagem
                 if(mapa.matriz[int((neymar.y_inicial - 10)/10)][i] == 1): janela.blit(img, (i*10 , neymar.y_inicial - 10))
-                
+                if(mapa.matriz[int((neymar.y_inicial - 20)/10)][i] == 1): janela.blit(img, (i*10 , neymar.y_inicial - 20))
+
             for i in range(int((neymar.x_inicial - 30)/10), int((neymar.x_inicial + 100)/10)):
-                if(mapa.matriz[int((neymar.y_inicial + 100)/10)][i] == 1): janela.blit(img, (i*10 , neymar.y_inicial + 100))
-    
+                #Renderiza as paredes em volta do personagem
+                if(mapa.matriz[int((neymar.y_inicial + 100)/10)][i] == 1): janela.blit(img, (i*10, neymar.y_inicial + 100))
+                if(mapa.matriz[int((neymar.y_inicial + 110)/10)][i] == 1): janela.blit(img, (i*10, neymar.y_inicial + 110))
+                # Renderiza o trófeu quando estiver próximo
+                for j in range(int((neymar.y_inicial - 30)/10), int((neymar.y_inicial + 130)/10)):
+                    if(mapa.matriz[j][i] == 2): janela.blit(mapa.objetivo, (i*10, j*10))
+
             for i in range(int((neymar.y_inicial - 30)/10), int((neymar.y_inicial + 130)/10)):
                 if(mapa.matriz[i][int((neymar.x_inicial - 10)/10)] == 1): janela.blit(img, (neymar.x_inicial-10 , i*10))
+                if(mapa.matriz[i][int((neymar.x_inicial - 20)/10)] == 1): janela.blit(img, (neymar.x_inicial-20 , i*10))
+                # Renderiza o trófeu quando estiver próximo
+                for j in range(int((neymar.x_inicial - 20)/10), int((neymar.x_inicial + 80)/10)):
+                    if(mapa.matriz[i][j] == 2): janela.blit(mapa.objetivo, (j*10, i*10))
 
             for i in range(int((neymar.y_inicial - 30)/10), int((neymar.y_inicial + 130)/10)):
                 if(mapa.matriz[i][int((neymar.x_inicial + 70)/10)] == 1): janela.blit(img, (neymar.x_inicial+70 , i*10))
+                if(mapa.matriz[i][int((neymar.x_inicial + 80)/10)] == 1): janela.blit(img, (neymar.x_inicial+80 , i*10))
+                # Renderiza o trófeu quando estiver próximo
+                for j in range(int((neymar.x_inicial - 20)/10), int((neymar.x_inicial + 80)/10)):
+                    if(mapa.matriz[i][j] == 2): janela.blit(mapa.objetivo, (j*10, i*10))
 
             #Verificando se o jogador chegou no objetivo
             if(mapa.matriz[int(neymar.y_inicial/10)][int(neymar.x_inicial/10)] == 2):
-                continue
+                break
 
             pygame.display.update()
 
