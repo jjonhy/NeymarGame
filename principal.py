@@ -1,39 +1,58 @@
 import pygame
-import time
 from fase import Fase
+from menu import Menu
+from creditos import Creditos
 
 
 class Principal:
     def __init__(self, dimensoes_janela, titulo):
         pygame.display.set_caption(titulo)
         self.janela = pygame.display.set_mode(dimensoes_janela)
-        self.imagem_menu = pygame.image.load('imagens/menu1.png')
-        self.imagem1_menu = pygame.image.load('imagens/menu2.png')
+        self.menu = Menu()
+        self.creditos = Creditos()
         self.imagem_fundo_jogo = pygame.image.load('imagens/campo.png')
         self.rodando = True
 
     def menu_inicial(self):
-        i = 0
-
-        exibir = True
-        while exibir:
-            if i % 2 == 0:
-                self.janela.blit(self.imagem_menu, (0, 0))
-            else:
-                self.janela.blit(self.imagem1_menu, (0, 0))
-            i += 1
+        while self.menu.exibindo:
+            self.menu.desenha(self.janela)
 
             for evento in pygame.event.get():
                 if evento.type == pygame.QUIT:
+                    self.menu.exibindo = False
                     self.rodando = False
-                    exibir = False
+                    return 3
 
-                if evento.type == pygame.KEYDOWN:
-                    if evento.key == pygame.K_RETURN:
-                        exibir = False
+                if evento.type == pygame.MOUSEBUTTONUP:
+                    if self.menu.jogar_botao.rect.collidepoint(pygame.mouse.get_pos()):
+                        self.menu.exibindo = False
+                        return 1
+
+                    elif self.menu.creditos_botao.rect.collidepoint(pygame.mouse.get_pos()):
+                        self.menu.exibindo = False
+                        return 2
+
+                    elif self.menu.sair_botao.rect.collidepoint(pygame.mouse.get_pos()):
+                        self.menu.exibindo = False
+                        self.rodando = False
+                        return 3
 
             pygame.display.update()
-            time.sleep(0.5)
+
+    def cena_creditos(self):
+        while self.creditos.exibindo:
+            self.creditos.desenha(self.janela)
+
+            for evento in pygame.event.get():
+                if evento.type == pygame.QUIT:
+                    self.creditos.exibindo = False
+                    self.rodando = False
+
+                if evento.type == pygame.MOUSEBUTTONUP:
+                    if self.creditos.voltar_botao.rect.collidepoint(pygame.mouse.get_pos()):
+                        self.creditos.exibindo = False
+
+            pygame.display.update()
 
     def novo_jogo(self):
         for i in range(1, 4):
@@ -61,7 +80,18 @@ class Principal:
 pygame.init()
 
 game = Principal((1000, 800), "PROJETO FINAL POO")
-game.menu_inicial()
-game.novo_jogo()
+while game.rodando:
+    opcao_menu = game.menu_inicial()
+
+    if opcao_menu == 1:
+        game.novo_jogo()
+
+    elif opcao_menu == 2:
+        game.creditos.exibindo = True
+        game.cena_creditos()
+        game.menu.exibindo = True
+
+    else:
+        game.rodando = False
 
 pygame.quit()
