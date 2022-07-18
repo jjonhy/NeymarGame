@@ -126,9 +126,7 @@ while game.rodando:
     opcao_menu = game.menu_inicial()
 
     if opcao_menu == 1:
-        print(game.rodando)
         game.novo_jogo()
-        print(game.rodando)
 
     elif opcao_menu == 2:
         game.creditos.exibindo = True
