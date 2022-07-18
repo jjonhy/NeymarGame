@@ -1,138 +1,107 @@
 import pygame
-from fase import Fase
-from vitoria import Vitoria
-from menu import Menu
+from menu_inicial import MenuInicial
+from ajuda import Ajuda
 from creditos import Creditos
+from menu import Menu
+from fase import Fase
+from transicao import Transicao
+from final import Final
 
 
 class Principal:
     def __init__(self, dimensoes_janela, titulo):
         pygame.display.set_caption(titulo)
         self.janela = pygame.display.set_mode(dimensoes_janela)
-        self.menu = Menu()
+        self.menu_inicial = MenuInicial()
+        self.ajuda = Ajuda()
         self.creditos = Creditos()
-        self.imagem_fundo_jogo = pygame.image.load('imagens/campo.png')
-        # self.musica = pygame.mixer.music.load('imagens/torcida.mp3')
-        # pygame.mixer.init()
-        # pygame.mixer.music.play(-1)
+        self.menu = Menu()
+        self.imagem_fundo_jogo = pygame.image.load('imagens/jogo/campo.png')
+        self.transicoes = Transicao()
+        self.final = Final()
         self.rodando = True
-        self.fim_fase = Vitoria()
 
-    def menu_inicial(self):
-        self.menu.exibindo = True
-        while self.menu.exibindo:
-            self.menu.desenha(self.janela)
+    def desenha_jogo(self):
+        self.janela.blit(self.imagem_fundo_jogo, (0, 0))
 
-            for evento in pygame.event.get():
-                if evento.type == pygame.QUIT:
-                    self.menu.exibindo = False
-                    self.rodando = False
-                    return 3
+    def verifica_eventos(self):
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return 4
 
-                if evento.type == pygame.MOUSEBUTTONUP:
-                    if self.menu.jogar_botao.rect.collidepoint(pygame.mouse.get_pos()):
-                        self.menu.exibindo = False
-                        return 1
+            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
+                return self.menu.executa_cena(self.janela)
 
-                    elif self.menu.creditos_botao.rect.collidepoint(pygame.mouse.get_pos()):
-                        self.menu.exibindo = False
-                        return 2
-
-                    elif self.menu.sair_botao.rect.collidepoint(pygame.mouse.get_pos()):
-                        self.menu.exibindo = False
-                        self.rodando = False
-                        return 3
-
-            pygame.display.update()
-
-    def cena_creditos(self):
-        while self.creditos.exibindo:
-            self.creditos.desenha(self.janela)
-
-            for evento in pygame.event.get():
-                if evento.type == pygame.QUIT:
-                    self.creditos.exibindo = False
-                    self.rodando = False
-
-                if evento.type == pygame.MOUSEBUTTONUP:
-                    if self.creditos.voltar_botao.rect.collidepoint(pygame.mouse.get_pos()):
-                        self.creditos.exibindo = False
-
-            pygame.display.update()
+        return 0
 
     def novo_jogo(self):
-        for i in range(1, 4):
-            f = Fase(i)
-            while self.rodando:
-                pygame.time.delay(50)
-                self.janela.blit(self.imagem_fundo_jogo, (0, 0))
+        aux = 0
 
-                for evento in pygame.event.get():
-                    if evento.type == pygame.QUIT:
-                        pygame.quit()
+        i = 1
+        while i < 4:
+            f = Fase(i)
+
+            while True:
+                pygame.time.delay(50)
+                self.desenha_jogo()
+
+                aux = self.verifica_eventos()
+                if aux == 4 or aux == 6 or aux == 8:
+                    break
 
                 f.acoes(pygame.key.get_pressed())
                 f.desenha(self.janela)
 
                 if f.mapa.matriz[int(f.neymar.y / 10)][int(f.neymar.x / 10)] == 2:
-                    self.fim_fase.mostra_vitoria(self.janela, i)
+                    self.transicoes.executa_transicao(self.janela, i)
+                    i += 1
                     break
 
                 pygame.display.update()
-        self.final()
-        self.rodando = True
 
-    def final(self):
-        font = pygame.font.SysFont('Arial', 120, bold=True)
+            if aux == 4 or aux == 6 or aux == 8:
+                break
 
-        self.fadeout()
-        texto = font.render('VAMOS', True, "WHITE")
-        self.janela.blit(texto, (268, 100))
-        pygame.display.flip()
-        pygame.time.delay(400)
-        texto = font.render('BRASIL', True, "WHITE")
-        self.janela.blit(texto, (268, 500))
-        pygame.display.flip()
-        pygame.time.delay(1000)
-        self.fadeout()
-        font = pygame.font.SysFont('Arial', 48, bold=True)
-        texto = font.render('Apesar de tudo e todos!', True, "WHITE")
-        self.janela.blit(texto, (200, 100))
-        pygame.display.flip()
-        pygame.time.delay(400)
-        texto = font.render('E os flagelos da nação', True, "WHITE")
-        self.janela.blit(texto, (220, 350))
-        pygame.display.flip()
-        pygame.time.delay(400)
-        texto = font.render('Entregamos nossos Corações!!!', True, "WHITE")
-        self.janela.blit(texto, (130, 600))
-        pygame.display.flip()
-        pygame.time.delay(3000)
-        self.fadeout()
-        self.cena_creditos()
-    
+        return aux
 
-    def fadeout(self):
-        for i in range(0,255,10):
-            self.imagem_fundo_jogo.set_alpha(i)
-            self.janela.blit(self.imagem_fundo_jogo, (0,0))
-            pygame.display.flip()
-            pygame.time.delay(50)
 
 pygame.init()
 
-game = Principal((1000, 800), "PROJETO FINAL POO")
+game = Principal((1000, 800), "Neymar´s Tale")
+
+opcao_menu_inicial = game.menu_inicial.executa_cena(game.janela)
+
 while game.rodando:
-    opcao_menu = game.menu_inicial()
+    if opcao_menu_inicial == 1:
+        opcao_jogo = game.novo_jogo()
+        if opcao_jogo == 0:
+            game.final.executa_cena(game.janela)
+            opcao_menu_inicial = 3
 
-    if opcao_menu == 1:
-        game.novo_jogo()
+        elif opcao_jogo == 4:
+            game.rodando = False
 
-    elif opcao_menu == 2:
-        game.creditos.exibindo = True
-        game.cena_creditos()
-        game.menu.exibindo = True
+        elif opcao_jogo == 6:
+            opcao_menu_inicial = game.menu_inicial.executa_cena(game.janela)
 
+        elif opcao_jogo == 8:
+            opcao_menu_inicial = 1
+
+    elif opcao_menu_inicial == 2:
+        opcao_ajuda = game.ajuda.executa_cena(game.janela)
+        if opcao_ajuda == 4:
+            game.rodando = False
+
+        elif opcao_ajuda == 6:
+            opcao_menu_inicial = game.menu_inicial.executa_cena(game.janela)
+
+    elif opcao_menu_inicial == 3:
+        opcao_creditos = game.creditos.executa_cena(game.janela)
+        if opcao_creditos == 4:
+            game.rodando = False
+
+        elif opcao_creditos == 6:
+            opcao_menu_inicial = game.menu_inicial.executa_cena(game.janela)
     else:
         game.rodando = False
 

@@ -4,7 +4,7 @@ import pygame
 class Mapa:
     def __init__(self, fase):
         if fase == 1:
-            self.objetivo = pygame.image.load("imagens/liberta _tan_ney.png")
+            self.objetivo = pygame.image.load("imagens/jogo/liberta _tan_ney.png")
 
             self.matriz = [
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -190,7 +190,7 @@ class Mapa:
             self.matriz[44][17] = 2
 
         if fase == 2:
-            self.objetivo = pygame.image.load("imagens/champs_tam_ney.png")
+            self.objetivo = pygame.image.load("imagens/jogo/champs_tam_ney.png")
 
             self.matriz = [
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -438,7 +438,7 @@ class Mapa:
             self.matriz[35][66] = 2
 
         if fase == 3:
-            self.objetivo = pygame.image.load("imagens/copadomundo_tam_ney.png")
+            self.objetivo = pygame.image.load("imagens/jogo/copadomundo_tam_ney.png")
 
             self.matriz = [
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

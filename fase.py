@@ -6,7 +6,7 @@ from neymar import Neymar
 class Fase:
     def __init__(self, num_fase):
         self.mapa = Mapa(num_fase)
-        self.neymar = Neymar('imagens/neymar.png', [0, 0], 10)
+        self.neymar = Neymar('imagens/jogo/neymar.png', [0, 0], 10)
         if num_fase == 1:
             self.neymar.y = 10
         elif num_fase == 2:
