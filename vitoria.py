@@ -13,20 +13,19 @@ class Vitoria:
         self.win_track.append((190,165))
         self.win_track.append((189,225))
         self.win_track.append((298,242))
+
+        self.confetti = pygame.image.load('imagens/confetti.png')
+        self.confetti = pygame.transform.scale(self.confetti, (1000, 800))
     
 
     def mostra_vitoria(self, janela, fase):
+        janela.blit(self.confetti, (0,0))
         janela.blit(self.vecwin[fase-1], self.win_track[fase-1])
         pygame.display.update()
-        pygame.time.delay(5000)
+        pygame.time.delay(2000)
 
 
-    def update(self):
 
-        oldCenter = self.rect.center
-        self.image = pygame.transform.rotate(self.imagePuff, self.angle)
-        self.rect = self.image.get_rect()
-        self.rect.center = oldCenter
         
 
     
