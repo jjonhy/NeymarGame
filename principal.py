@@ -12,6 +12,8 @@ class Principal:
     def __init__(self, dimensoes_janela, titulo):
         pygame.display.set_caption(titulo)
         self.janela = pygame.display.set_mode(dimensoes_janela)
+        self.icone = pygame.image.load('imagens/icone/icone.png')
+        pygame.display.set_icon(self.icone)
         self.menu_inicial = MenuInicial()
         self.ajuda = Ajuda()
         self.creditos = Creditos()

@@ -6,8 +6,8 @@ from cena import Cena
 class Ajuda(Cena):
     def __init__(self):
         super().__init__()
-        self.titulo = Obj('imagens/ajuda/titulo.png', 224.5, 50, self.todas_sprites)
-        self.conteudo = Obj('imagens/ajuda/conteudo_ajuda.png', 41.5, 150, self.todas_sprites)
+        self.titulo = Obj('imagens/ajuda/titulo.png', 211, 50, self.todas_sprites)
+        self.conteudo = Obj('imagens/ajuda/conteudo_ajuda.png', 41.5, 175, self.todas_sprites)
         self.inicio_botao = Obj('imagens/ajuda/inicio.png', 368, 700, self.todas_sprites)
 
     def verifica_eventos(self):

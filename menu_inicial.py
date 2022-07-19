@@ -6,6 +6,7 @@ from cena import Cena
 class MenuInicial(Cena):
     def __init__(self):
         super().__init__()
+        self.titulo = Obj('imagens/creditos/titulo.png', 211, 150, self.todas_sprites)
         self.jogar_botao = Obj('imagens/menu_inicial/jogar.png', 368, 400, self.todas_sprites)
         self.ajuda_botao = Obj('imagens/menu_inicial/ajuda.png', 368, 483, self.todas_sprites)
         self.creditos_botao = Obj('imagens/menu_inicial/creditos.png', 368, 566, self.todas_sprites)

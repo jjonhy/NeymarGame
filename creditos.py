@@ -6,9 +6,9 @@ from cena import Cena
 class Creditos(Cena):
     def __init__(self):
         super().__init__()
-        self.titulo = Obj('imagens/creditos/titulo.png', 224.5, 50, self.todas_sprites)
-        self.descricao = Obj('imagens/creditos/descricao.png', 41.5, 150, self.todas_sprites)
-        self.integrantes = Obj('imagens/creditos/integrantes.png', 326.5, 350, self.todas_sprites)
+        self.titulo = Obj('imagens/creditos/titulo.png', 211, 50, self.todas_sprites)
+        self.descricao = Obj('imagens/creditos/descricao.png', 41.5, 175, self.todas_sprites)
+        self.integrantes = Obj('imagens/creditos/integrantes.png', 326.5, 375, self.todas_sprites)
         self.inicio_botao = Obj('imagens/creditos/inicio.png', 368, 700, self.todas_sprites)
 
     def verifica_eventos(self):
