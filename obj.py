@@ -9,6 +9,3 @@ class Obj(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect[0] = x
         self.rect[1] = y
-
-    def desenha(self, janela):
-        self.group.draw(janela)

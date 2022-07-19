@@ -67,7 +67,7 @@ class Principal:
 
 pygame.init()
 
-game = Principal((1000, 800), "Neymar´s Tale")
+game = Principal((1000, 800), "Menino to Hero")
 
 opcao_menu_inicial = game.menu_inicial.executa_cena(game.janela)
 

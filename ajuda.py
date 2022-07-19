@@ -1,39 +1,29 @@
 import pygame
 from obj import Obj
+from cena import Cena
 
 
-class Ajuda:
+class Ajuda(Cena):
     def __init__(self):
-        self.todas_sprites = pygame.sprite.Group()
-        self.fundo = Obj('imagens/ajuda/fundo.png', 0, 0, self.todas_sprites)
-        self.voltar_botao = Obj('imagens/ajuda/voltar.png', 368, 700, self.todas_sprites)
-        self.exibindo = True
-
-    def desenha(self, janela):
-        self.todas_sprites.draw(janela)
+        super().__init__()
+        self.titulo = Obj('imagens/ajuda/titulo.png', 224.5, 50, self.todas_sprites)
+        self.conteudo = Obj('imagens/ajuda/conteudo_ajuda.png', 41.5, 150, self.todas_sprites)
+        self.inicio_botao = Obj('imagens/ajuda/inicio.png', 368, 700, self.todas_sprites)
 
     def verifica_eventos(self):
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 return 4
 
+            if evento.type == pygame.MOUSEMOTION:
+                if self.inicio_botao.rect.collidepoint(pygame.mouse.get_pos()):
+                    self.inicio_botao.image = pygame.image.load('imagens/ajuda/inicio2.png')
+
+                else:
+                    self.inicio_botao.image = pygame.image.load('imagens/ajuda/inicio.png')
+
             if evento.type == pygame.MOUSEBUTTONUP:
-                if self.voltar_botao.rect.collidepoint(pygame.mouse.get_pos()):
+                if self.inicio_botao.rect.collidepoint(pygame.mouse.get_pos()):
                     return 6
 
         return 0
-
-    def executa_cena(self, janela):
-        aux = 0
-
-        self.exibindo = True
-        while self.exibindo:
-            self.desenha(janela)
-
-            aux = self.verifica_eventos()
-            if aux != 0:
-                self.exibindo = False
-
-            pygame.display.update()
-
-        return aux
